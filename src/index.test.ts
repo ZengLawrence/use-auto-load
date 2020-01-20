@@ -1,7 +1,7 @@
-import { useMyHook } from '.'
+import { useAutoLoad } from '.'
 
-describe('useMyHook', () => {
+describe('useAutoLoad', () => {
   it('is truthy', () => {
-    expect(useMyHook).toBeTruthy()
+    expect(useAutoLoad).toBeTruthy()
   })
 })

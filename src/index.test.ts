@@ -14,7 +14,6 @@ describe('test useAutoLoad', () => {
 
     await wait(() => {
       const { isLoading } = result.current;
-      console.log(`isLoading: ${isLoading}`);
       return isLoading === false;
     }, {timeout: 500});
     {

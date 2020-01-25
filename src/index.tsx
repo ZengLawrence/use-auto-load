@@ -6,7 +6,6 @@ export const useAutoLoad = (load: () => Promise<void>) => {
   const [timeoutHandler, setTimeoutHandler] = useState<any>(null);
 
   useEffect(() => {
-    console.log(`isLoaded: ${isLoaded}, isLoading: ${isLoading}`);
     if (!isLoaded && !isLoading) {
       if (!isLoading) {
         setIsLoading(true);

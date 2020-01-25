@@ -6,16 +6,13 @@ describe('test useAutoLoad', () => {
     const mockLoadFn = jest.fn();
     mockLoadFn.mockReturnValue(Promise.resolve());
 
-    const { result, wait } = renderHook(() => useAutoLoad(mockLoadFn));
+    const { result, waitForNextUpdate } = renderHook(() => useAutoLoad(mockLoadFn));
     {
       const { isLoading } = result.current;
       expect(isLoading).toBeTruthy();
     }
 
-    await wait(() => {
-      const { isLoading } = result.current;
-      return isLoading === false;
-    }, {timeout: 500});
+    await waitForNextUpdate();
     {
       const { isLoading } = result.current;
       expect(isLoading).toBeFalsy();

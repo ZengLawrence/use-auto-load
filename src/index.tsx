@@ -5,15 +5,20 @@ export const useAutoLoad = (load: () => Promise<void>) => {
   const [isLoading, setIsLoading] = useState(false);
   const [timeoutHandler, setTimeoutHandler] = useState<any>(null);
 
+  const startLoading = () => setIsLoading(true);
+  const endLoading = () => {
+    setIsLoaded(true);
+    setIsLoading(false);
+  }
+
   useEffect(() => {
     if (!isLoaded && !isLoading) {
       if (!isLoading) {
-        setIsLoading(true);
+        startLoading();
 
         const localTimeout = setTimeout(() => {
           load().then(() => {
-            setIsLoaded(true);
-            setIsLoading(false);
+            endLoading();
           });
         });
         setTimeoutHandler(localTimeout);

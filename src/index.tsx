@@ -15,13 +15,13 @@ const useLoadingState = () => {
 
 export const useAutoLoad = (load: () => Promise<void>) => {
   const { isLoading, shouldLoad, startLoading, endLoading } = useLoadingState();
-  const timeoutHandler = useRef<any>();
+  const timeoutRef = useRef<any>();
 
   useEffect(() => {
     if (shouldLoad && !isLoading) {
       startLoading();
 
-      timeoutHandler.current = setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         load().then(() => {
           endLoading();
         });
@@ -33,9 +33,9 @@ export const useAutoLoad = (load: () => Promise<void>) => {
   // just for clear timeout when unmounted
   useEffect(() => {
     return function cleanUp() {
-      if (timeoutHandler.current) {
-        clearTimeout(timeoutHandler.current);
-        timeoutHandler.current = null;
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
       }
     }
   }, [])

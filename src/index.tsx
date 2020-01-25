@@ -27,7 +27,7 @@ export const useAutoLoad = (load: () => Promise<void>) => {
         }
       }
 
-  }, [isLoading, isLoaded, load]);
+  }, [isLoading, isLoaded]);
 
   return { isLoading };
 };

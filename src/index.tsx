@@ -22,7 +22,9 @@ export const useAutoLoad = (load: () => Promise<void>) => {
       }
 
       return function cleanUp() {
+        if (timeoutHandler) {
           clearTimeout(timeoutHandler);
+        }
       }
 
   }, [isLoading, isLoaded, load]);

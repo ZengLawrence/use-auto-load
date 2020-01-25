@@ -1,7 +1,27 @@
 import { useAutoLoad } from '.'
+import { renderHook } from '@testing-library/react-hooks';
 
-describe('useAutoLoad', () => {
-  it('is truthy', () => {
-    expect(useAutoLoad).toBeTruthy()
+describe('test useAutoLoad', () => {
+  it('isLoading is initialized to true, after load() function is called, should return false for isLoading', async () => {
+    const mockLoadFn = jest.fn();
+    mockLoadFn.mockReturnValue(Promise.resolve());
+
+    const { result, wait } = renderHook(() => useAutoLoad(mockLoadFn));
+    {
+      const { isLoading } = result.current;
+      expect(isLoading).toBeTruthy();
+    }
+
+    await wait(() => {
+      const { isLoading } = result.current;
+      console.log(`isLoading: ${isLoading}`);
+      return isLoading === false;
+    }, {timeout: 500});
+    {
+      const { isLoading } = result.current;
+      expect(isLoading).toBeFalsy();
+      expect(mockLoadFn).toBeCalledTimes(1);
+    }
   })
+
 })

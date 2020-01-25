@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 
-export const useAutoLoad = (load: () => Promise<void>) => {
+const useLoadingState = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [timeoutHandler, setTimeoutHandler] = useState<any>(null);
 
   const startLoading = () => setIsLoading(true);
   const endLoading = () => {
@@ -11,18 +10,23 @@ export const useAutoLoad = (load: () => Promise<void>) => {
     setIsLoading(false);
   }
 
-  useEffect(() => {
-    if (!isLoaded && !isLoading) {
-      if (!isLoading) {
-        startLoading();
+  return { isLoading, shouldLoad: !isLoaded && !isLoading, startLoading, endLoading }
+}
 
-        const localTimeout = setTimeout(() => {
-          load().then(() => {
-            endLoading();
-          });
+export const useAutoLoad = (load: () => Promise<void>) => {
+  const { isLoading, shouldLoad, startLoading, endLoading } = useLoadingState();
+  const [timeoutHandler, setTimeoutHandler] = useState<any>(null);
+
+  useEffect(() => {
+    if (shouldLoad && !isLoading) {
+      startLoading();
+
+      const localTimeout = setTimeout(() => {
+        load().then(() => {
+          endLoading();
         });
-        setTimeoutHandler(localTimeout);
-      }
+      });
+      setTimeoutHandler(localTimeout);
     }
 
     return function cleanUp() {
@@ -31,7 +35,7 @@ export const useAutoLoad = (load: () => Promise<void>) => {
       }
     }
 
-  }, [isLoading, isLoaded]);
+  }, [isLoading, shouldLoad]);
 
   return { isLoading };
 };

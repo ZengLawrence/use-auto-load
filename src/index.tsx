@@ -6,26 +6,26 @@ export const useAutoLoad = (load: () => Promise<void>) => {
   const [timeoutHandler, setTimeoutHandler] = useState<any>(null);
 
   useEffect(() => {
-        console.log(`isLoaded: ${isLoaded}, isLoading: ${isLoading}`);
-        if (!isLoaded && !isLoading) {
-          if (!isLoading) {
-            setIsLoading(true);
+    console.log(`isLoaded: ${isLoaded}, isLoading: ${isLoading}`);
+    if (!isLoaded && !isLoading) {
+      if (!isLoading) {
+        setIsLoading(true);
 
-            const localTimeout = setTimeout(() => {
-              load().then(() => {
-              setIsLoaded(true);
-              setIsLoading(false);
-            });
+        const localTimeout = setTimeout(() => {
+          load().then(() => {
+            setIsLoaded(true);
+            setIsLoading(false);
           });
-          setTimeoutHandler(localTimeout);
-        }
+        });
+        setTimeoutHandler(localTimeout);
       }
+    }
 
-      return function cleanUp() {
-        if (timeoutHandler) {
-          clearTimeout(timeoutHandler);
-        }
+    return function cleanUp() {
+      if (timeoutHandler) {
+        clearTimeout(timeoutHandler);
       }
+    }
 
   }, [isLoading, isLoaded]);
 
